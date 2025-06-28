@@ -1,0 +1,30 @@
+You need to manually copy your updated smart-library-nginx.conf file from your project folder to the Nginx configuration directory on your system.
+
+**Here’s what to do:**
+
+1. **Copy the file to sites-available:**
+```bash
+sudo cp /home/iit/Desktop/IIT/6th_sem/601_Distributed_System/phase-3/Smart-Library/smart-library-nginx.conf /etc/nginx/sites-available/smart-library
+```
+
+2. **Enable the site by creating a symlink:**
+```bash
+sudo ln -s /etc/nginx/sites-available/smart-library /etc/nginx/sites-enabled/
+```
+
+3. **(Optional) Remove the default site to avoid conflicts:**
+```bash
+sudo rm /etc/nginx/sites-enabled/default
+```
+
+4. **Test the Nginx configuration:**
+```bash
+sudo nginx -t
+```
+
+5. **Reload Nginx to apply changes:**
+```bash
+sudo systemctl reload nginx
+```
+
+After these steps, your Nginx will use the config you created in your project folder. Let me know if you need help with any step!
