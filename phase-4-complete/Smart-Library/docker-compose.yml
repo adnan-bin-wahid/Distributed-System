@@ -1,0 +1,85 @@
+version: '3.8'
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3002:3002"
+    environment:
+      - DB_HOST=user-db
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+      - DB_NAME=user_db
+      - DB_PORT=5432
+      - PORT=3002
+    depends_on:
+      - user-db
+
+  book-service:
+    build: ./book-service
+    ports:
+      - "3001:3001"
+    environment:
+      - DB_HOST=book-db
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+      - DB_NAME=book_db
+      - DB_PORT=5432
+      - PORT=3001
+    depends_on:
+      - book-db
+
+  loan-service:
+    build: ./loan-service
+    ports:
+      - "3003:3003"
+    environment:
+      - DB_HOST=loan-db
+      - DB_USER=postgres
+      - DB_PASSWORD=1234
+      - DB_NAME=loan_db
+      - DB_PORT=5432
+      - PORT=3003
+      - USER_SERVICE_URL=http://user-service:3002
+      - BOOK_SERVICE_URL=http://book-service:3001
+    depends_on:
+      - loan-db
+      - user-service
+      - book-service
+
+  user-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+
+  book-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: book_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - book-db-data:/var/lib/postgresql/data
+
+  loan-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: loan_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5435:5432"
+    volumes:
+      - loan-db-data:/var/lib/postgresql/data
+
+volumes:
+  user-db-data:
+  book-db-data:
+  loan-db-data:
