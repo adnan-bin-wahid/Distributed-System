@@ -1,0 +1,111 @@
+You need to manually copy your updated smart-library-nginx.conf file from your project folder to the Nginx configuration directory on your system.
+
+**Here’s what to do:**
+
+1. **Copy the file to sites-available:**
+```bash
+sudo cp /home/iit/Desktop/IIT/6th_sem/601_Distributed_System/phase-3/Smart-Library/smart-library-nginx.conf /etc/nginx/sites-available/smart-library
+```
+
+2. **Enable the site by creating a symlink:**
+```bash
+sudo ln -s /etc/nginx/sites-available/smart-library /etc/nginx/sites-enabled/
+```
+
+3. **(Optional) Remove the default site to avoid conflicts:**
+```bash
+sudo rm /etc/nginx/sites-enabled/default
+```
+
+4. **Test the Nginx configuration:**
+```bash
+sudo nginx -t
+```
+
+5. **Reload Nginx to apply changes:**
+```bash
+sudo systemctl reload nginx
+```
+
+After these steps, your Nginx will use the config you created in your project folder. Let me know if you need help with any step!
+
+
+Made changes.
+
+A docker-compose.yml file has been created for you. It will:
+- Build and run all three services and their own Postgres databases
+- Set up environment variables and networking for inter-service communication
+- Persist database data using named volumes
+
+**Next steps:**
+1. Run `docker compose up --build` in your project root to start everything.
+2. All services will be accessible on their respective ports (3001, 3002, 3003).
+3. The services will use Docker-internal hostnames for database and service-to-service communication.
+
+Let me know if you want step-by-step Docker commands, troubleshooting, or help with environment variables!
+
+
+
+Here’s how to check that all your Dockerized microservices are working well:
+
+---
+
+### 1. **Build and Start All Services**
+
+In your project root, run:
+```bash
+docker compose up --build
+```
+This will build images and start all services and databases. You should see logs for each service in your terminal.
+
+---
+
+### 2. **Check Container Status**
+
+Open a new terminal and run:
+```bash
+docker compose ps
+```
+You should see all services (user-service, book-service, loan-service, and the three databases) with a `running` status.
+
+---
+
+### 3. **Test Service Endpoints**
+
+Use your browser, Postman, or `curl` to test:
+- `http://localhost:3002/api/users`
+- `http://localhost:3001/api/books`
+- `http://localhost:3003/api/loans`
+
+You should get a response (even if it’s an empty array or a 404 for missing data).
+
+---
+
+### 4. **Check Logs for Errors**
+
+To see logs for a specific service:
+```bash
+docker compose logs user-service
+docker compose logs book-service
+docker compose logs loan-service
+```
+Look for errors or connection issues.
+
+---
+
+### 5. **Test Inter-Service Communication**
+
+Try creating a user, a book, and then a loan (using Postman or `curl`). The loan service should be able to reach the user and book services using the internal Docker network.
+
+---
+
+### 6. **Stop All Services**
+
+When done, stop everything with:
+```bash
+docker compose down
+```
+
+---
+
+If you encounter any errors or want to automate API tests, let me know! I can help you with troubleshooting or provide sample test commands.
